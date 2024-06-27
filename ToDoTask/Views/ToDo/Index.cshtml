@@ -1,0 +1,120 @@
+@model IEnumerable<ToDoTask.TaskModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- Container for displaying task counts -->
+<div class="container d-flex-inline text-center justify-content-center">
+    <div class="row justify-content-center">
+        <div class="col-md-12 mt-3">
+            <div class="card" style="background-color: rgb(240, 243, 240); color: rgb(19, 18, 18);">
+                <div class="card-header d-flex justify-content-between align-items-start">
+                    <h5>Completed</h5>
+                    <h5>@Model.Where(x => x.Status.StatusId == "Completed").Count()</h5>
+                    <h5>Open</h5>
+                    <h5>@Model.Where(x => x.Status.StatusId == "Open").Count()</h5>
+                    <h5>Past Due</h5>
+                    <h5 class="text-danger" : ;">@Model.Where(x => x.DueDate < DateTime.Now).Count()</h5>
+                    <h5>Due Today</h5>
+                    <h5>@Model.Where(x => x.DueDate.Date == DateTime.Now.Date).Count()</h5>
+                    <h5>This Week</h5>
+                    <h5>@Model.Where(x => x.DueDate.Date >= DateTime.Now.Date && x.DueDate.Date <=
+                                 DateTime.Now.Date.AddDays(7)).Count()</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Search form -->
+    <div class="container d-flex-inline mt-3">
+        <form asp-action="Index" method="get">
+            <div class="row d-flex-inline">
+                <div class="col-md-10 mt-3 d-flex-inline">
+                    <input type="text" name="SearchString" class="form-control" placeholder="Search" value="" />
+                </div>
+                <div class="col-md-1 mt-3 d-flex-inline">
+                    <input type="submit" value="Search" class="btn btn-dark" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <br>
+
+    <!-- Buttons for creating new task, sorting, and refreshing -->
+    <a class="btn btn-success" asp-action="Create">Create New</a>
+    <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@ViewBag.StatusSortParam">By Status</a>
+    <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@ViewBag.PrioritySortParam">By Priority</a>
+    <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@ViewBag.DueDateSortParam">By Due Date</a>
+    <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@ViewBag.CategorySortParam">By Category</a>
+    <a class="btn btn-secondary" asp-action="Index">Refresh</a>
+
+    <!-- Table for displaying tasks -->
+    <table class="table-striped table-hover table">
+        <thead>
+            <p></p>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)</a>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Priority)
+                </th>
+                <th style="display: none;">
+                    @Html.DisplayNameFor(model => model.DueDate)
+                <th>Due Date</th>
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <!-- Display task status -->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.StatusId)
+                    </td>
+                    <!-- Display task description -->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <!-- Display task priority -->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Priority.PriorityId)
+                    </td>
+                    <!-- Display task due date with color coding for past due dates -->
+                    <td>
+                        @if (item.DueDate < DateTime.Now)
+                        {
+                            <span class="text-danger">
+                                @Html.DisplayFor(modelItem => item.DueDate)
+                            </span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.DueDate)
+                        }
+                    </td>
+                    <!-- Display task category -->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.CategoryId)
+                    </td>
+                    <!-- Display options for task (details, edit, delete) -->
+                    <td class="col d-flex-inline">
+                        <a asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-info-square btn"></i></a>
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square btn"></i></a>
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash3 btn btn"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <!-- Refresh button -->
+    <a class="btn btn-dark" asp-action="Index">Refresh</a>
+</div>

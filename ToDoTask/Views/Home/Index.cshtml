@@ -1,0 +1,14 @@
+﻿@model IEnumerable<ToDoTask.TaskModel>
+    
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div class="container-fluid justify-content-center">
+    <div class="text-center mx-auto p-2" style="margin-top: 250px;">
+        <h1 class="display-3 mt-4">Task Log</h1>
+        @* <h3 class="display-6">Total: @Priorities.Count()</h3> *@
+        <div style="margin: 25px;">
+            <a class="btn btn-success m-1" asp-area="" asp-controller="Todo" asp-action="Index">Get Started</a>
+        </div>
+    </div>
+</div>

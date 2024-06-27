@@ -1,0 +1,46 @@
+@model ToDoTask.TaskModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create New Task</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label mt-2"></label>
+                <input asp-for="Description" class="form-control mt-1" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusId" class="control-label mt-2">Status</label>
+                <select asp-for="StatusId" class ="form-control mt-1" asp-items="ViewBag.StatusId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PriorityId" class="control-label mt-2">Priority</label>
+                <select asp-for="PriorityId" class ="form-control mt-1" asp-items="ViewBag.PriorityId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DueDate" class="control-label mt-2">Due Date</label>
+                <input asp-for="DueDate" class="form-control mt-1" />
+                <span asp-validation-for="DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label mt-2">Category</label>
+                <select asp-for="CategoryId" class ="form-control mt-1" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-success mt-3" />
+                <a asp-action="Index" class="btn btn-dark mt-3">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
