@@ -9,7 +9,7 @@ builder.Services.AddControllersWithViews();
 
 // Add EF Core services.
 builder.Services.AddDbContext<ToDoContext>(options =>
-    options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(configuration.GetConnectionString("ToDoContext")));
 
 var app = builder.Build();
 

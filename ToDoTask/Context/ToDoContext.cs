@@ -1,9 +1,4 @@
-﻿using System.Reflection.Emit;
-using Microsoft.EntityFrameworkCore;
-using ToDoTask.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ToDoTask;
-using Microsoft.EntityFrameworkCore.Sqlite;
+﻿using Microsoft.EntityFrameworkCore;
 
 
 namespace ToDoTask;
@@ -20,9 +15,16 @@ public class ToDoContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        optionsBuilder.UseSqlite(configuration.GetConnectionString("ToDoContext"));
 
-        optionsBuilder.UseSqlite(@"Data Source=/Users/evil/Desktop/WeCanCodeIt/ToDoTask/ToDoTask/Database/ToDoDB.db");
-    
+        if (configuration["Environment"] == "Test")
+        {
+            optionsBuilder.UseSqlite("ConnectionString=Data Source=ToDoContext.db");
+        }
+        else
+        {
+            optionsBuilder.UseSqlite(configuration.GetConnectionString("ToDoContext"));
+        }
     }
 
     public DbSet<TaskModel> Tasks { get; set; }
